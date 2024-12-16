@@ -51,7 +51,7 @@ router.route("/submit").post(async (req, res, next) => {
     };
     
     const doc = new PDFDocument();
-    doc.pipe(fs.createWriteStream(`./public/output.pdf`));
+    doc.pipe(fs.createWriteStream(`./tmp/output.pdf`));
     doc
       .fontSize(20)
       .font("Helvetica-Bold")
@@ -71,7 +71,7 @@ router.route("/submit").post(async (req, res, next) => {
 
     console.log("PDF Created!");
     setTimeout(() => {
-      res.sendFile(path.resolve(`./public/output.pdf`));
+      res.sendFile(path.resolve(`./tmp/output.pdf`));
     }, 1000);
   } catch (err) {
     next(err);
