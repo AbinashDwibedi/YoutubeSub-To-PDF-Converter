@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Screen</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #1a2a6c 10%, #b21f1f 40%, #fdbb2d 70%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            color: #fff;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        h1 {
+            color: white;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 10px 0 0 10px;
+            font-size: 1rem;
+            outline: none;
+            color: #333;
+        }
+
+        button {
+            padding: 0.8rem 1.2rem;
+            border: none;
+            background: #6a11cb;
+            color: white;
+            border-radius: 0 10px 10px 0;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: #2575fc;
+        }
+
+        .download-button {
+            display: inline-block;
+            margin-top: 1.5rem;
+            padding: 0.8rem 2rem;
+            border-radius: 10px;
+            background: #2575fc;
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: background 0.3s ease;
+        }
+
+        .download-button:hover {
+            background: #6a11cb;
+        }
+
+        .footer {
+            margin-top: 2rem;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .footer a {
+            color: #ff6f61;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .container {
+                padding: 1.5rem;
+            }
+
+            input[type="text"] {
+                font-size: 0.9rem;
+            }
+
+            button {
+                font-size: 0.9rem;
+            }
+
+            .footer {
+                font-size: 0.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 1rem;
+                width: 90%;
+            }
+
+            h1 {
+                font-size: 1.2rem;
+            }
+
+            .input-group {
+                flex-direction: column;
+            }
+
+            input[type="text"] {
+                width: 90%;
+                font-size: 1rem;
+                border-radius: 10px;
+                margin: 0px 10px;
+            }
+            button{
+                margin-top: 10px;
+                width: 90%;
+                font-size: 1rem;
+                border-radius: 10px;
+            }
+            .footer {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to the Youtube Subtitle to PDF converter</h1>
+        <form action="/submit" method="POST">
+            <div class="input-group">
+                <input type="text" name="userInput" placeholder="Enter a valid youtube video url here..." required>
+                <button type="submit">Click Here</button>
+            </div>
+        </form>
+    </div>
+    <div class="footer">
+        <p>&copy; 2024 All rights reserved. Designed by <a href="https://github.com/AbinashDwibedi" target="_blank">Abinash Dwibedi</a></p>
+    </div>
+</body>
+</html>
