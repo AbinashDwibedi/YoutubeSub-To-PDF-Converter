@@ -1,8 +1,6 @@
 import { Router } from "express";
 import { getSubtitles } from "youtube-captions-scraper";
 import nlp from "compromise";
-import path from "path";
-import fs from "fs";
 import PDFDocument from "pdfkit";
 import fetch from "node-fetch";
 
@@ -19,15 +17,17 @@ router.route("/").get((req, res, next) => {
 router.route("/submit").post(async (req, res, next) => {
   try {
     const { userInput } = req.body;
-    let mainStr ="";
+    let mainStr = "";
+
     function extractVideoId(url) {
       const regex = /(?:https?:\/\/(?:www\.)?youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*\?v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
       const match = url.match(regex);
       return match ? match[1] : null; 
-  }
-    let mainLink = extractVideoId(userInput);
+    }
 
+    let mainLink = extractVideoId(userInput);
     const videoId = mainLink;
+
     await getSubtitles({ videoID: videoId, lang: "en" })
       .then((captions) => {
         for (let i = 0; i < captions.length; i++) {
@@ -37,9 +37,9 @@ router.route("/submit").post(async (req, res, next) => {
       .catch((err) => {
         console.error("Error fetching subtitles:", err);
       });
+
     const inputText = mainStr;
     const docu = nlp(inputText).sentences().toTitleCase();
-    // res.send(docu.text());
 
     const getTitleFromVideo = async (userInput) => {
       const response = await fetch(userInput);
@@ -47,34 +47,37 @@ router.route("/submit").post(async (req, res, next) => {
       const titleMatch = text.match(/<meta name="title" content="(.*?)"/);
       const title = titleMatch ? titleMatch[1] : 'No title found';
       
-      return title
+      return title;
     };
-    
+
     const doc = new PDFDocument();
-    doc.pipe(fs.createWriteStream(`./tmp/output.pdf`));
+    const buffers = [];
+    doc.on('data', buffers.push.bind(buffers));
+    doc.on('end', () => {
+      const pdfBuffer = Buffer.concat(buffers);
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', 'attachment; filename="output.pdf"');
+      res.send(pdfBuffer);
+    });
+
     doc
       .fontSize(20)
       .font("Helvetica-Bold")
       .text(await getTitleFromVideo(userInput), { align: "center"});
-    doc.fontSize(12).font("Helvetica").text("~ Abinash Dwibedi", {align:"right"})
+    doc.fontSize(12).font("Helvetica").text("~ Abinash Dwibedi", { align: "right" });
     doc
       .fontSize(14)
       .font("Helvetica")
       .moveDown(1)
-      .text(
-        docu.text() , {align:"justify"}
-      )
+      .text(docu.text(), { align: "justify" })
       .moveDown(1)
-      .text("***",{align:"center"});
+      .text("***", { align: "center" });
 
     doc.end();
 
-    console.log("PDF Created!");
-    setTimeout(() => {
-      res.sendFile(path.resolve(`./tmp/output.pdf`));
-    }, 1000);
   } catch (err) {
     next(err);
   }
 });
+
 export default router;
